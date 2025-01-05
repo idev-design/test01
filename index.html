@@ -2,381 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f6f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-        .container {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 500px;
-            padding: 30px;
-        }
-        .login-container {
-            text-align: center;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .expense-form {
-            display: grid;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .expense-list {
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            padding: 15px;
-        }
-        .expense-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        .currency-select {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .summary {
-            background-color: #e9f5e9;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-        .chart-container {
-            margin-top: 20px;
-            height: 300px;
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Login Page -->
-        <div id="loginPage" class="login-container">
-            <h2>Expense Tracker Login</h2>
-            <input type="text" id="username" placeholder="Username">
-            <input type="password" id="password" placeholder="Password">
-            <button onclick="login()">Login</button>
-        </div>
+    <div id="login-container" class="container">
+        <h2>Expense Tracker Login</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <input type="text" id="username" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
 
-        <!-- Expense Tracker Page -->
-        <div id="expenseTrackerPage" class="hidden">
-            <h2>Expense Tracker</h2>
-            
-            <!-- Currency Selection -->
-            <div class="currency-select">
-                <select id="currencySelect">
-                    <option value="INR">₹ Indian Rupee</option>
+    <div id="expense-container" class="container hidden">
+        <header>
+            <h1>Expense Tracker</h1>
+            <div class="currency-selector">
+                <select id="currency">
+                    <option value="INR">â‚¹ Indian Rupee</option>
                     <option value="USD">$ US Dollar</option>
-                    <option value="EUR">€ Euro</option>
+                    <option value="EUR">â‚¬ Euro</option>
                 </select>
             </div>
+            <button id="logout" class="logout-btn">Logout</button>
+        </header>
 
-            <!-- Expense Input Form -->
-            <div class="expense-form">
-                <input type="text" id="expenseDescription" placeholder="Expense Description">
-                <input type="number" id="expenseAmount" placeholder="Amount">
-                <select id="expenseCategory">
-                    <option value="Food">Food</option>
-                    <option value="Transport">Transport</option>
-                    <option value="Utilities">Utilities</option>
-                    <option value="Entertainment">Entertainment</option>
-                    <option value="Other">Other</option>
-                </select>
-                <button onclick="addExpense()">Add Expense</button>
+        <div class="main-content">
+            <div class="add-expense-section">
+                <h3>Add New Expense</h3>
+                <form id="expense-form">
+                    <input type="text" id="description" placeholder="Description" required>
+                    <input type="number" id="amount" placeholder="Amount" required>
+                    <select id="category" required>
+                        <option value="Food">Food</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input type="date" id="date" required>
+                    <div class="split-section">
+                        <label>Split with:</label>
+                        <div id="split-members">
+                            <input type="text" class="split-member" placeholder="Enter name">
+                        </div>
+                        <button type="button" id="add-member">+ Add Person</button>
+                    </div>
+                    <button type="submit">Add Expense</button>
+                </form>
             </div>
 
-            <!-- Expense List -->
-            <div class="expense-list" id="expenseList">
-                <!-- Expenses will be dynamically added here -->
-            </div>
+            <div class="reports-section">
+                <h3>Expense Summary</h3>
+                <div class="summary-cards">
+                    <div class="card">
+                        <h4>Total Expenses</h4>
+                        <p id="total-expenses">0</p>
+                    </div>
+                    <div class="card">
+                        <h4>Monthly Average</h4>
+                        <p id="monthly-average">0</p>
+                    </div>
+                </div>
 
-            <!-- Expense Summary -->
-            <div class="summary" id="expenseSummary">
-                <!-- Summary will be dynamically updated -->
-            </div>
+                <div class="expense-list">
+                    <h3>Recent Expenses</h3>
+                    <table id="expenses-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Split With</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expenses-body"></tbody>
+                    </table>
+                </div>
 
-            <!-- Logout Button -->
-            <button onclick="logout()">Logout</button>
+                <div class="settlements">
+                    <h3>Settlements</h3>
+                    <div id="settlements-list"></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script>
-        // Expense Tracking Class
-        class ExpenseTracker {
-            constructor() {
-                // Initialize expenses from localStorage or empty array
-                this.expenses = JSON.parse(localStorage.getItem('expenses')) || [];
-                this.currency = localStorage.getItem('currency') || 'INR';
-            }
-
-            addExpense(description, amount, category) {
-                const expense = {
-                    id: Date.now(),
-                    description,
-                    amount: parseFloat(amount),
-                    category,
-                    date: new Date().toISOString(),
-                    currency: this.currency
-                };
-
-                this.expenses.push(expense);
-                this.saveExpenses();
-                return expense;
-            }
-
-            saveExpenses() {
-                localStorage.setItem('expenses', JSON.stringify(this.expenses));
-            }
-
-            deleteExpense(id) {
-                this.expenses = this.expenses.filter(expense => expense.id !== id);
-                this.saveExpenses();
-            }
-
-            calculateSummary() {
-                if (this.expenses.length === 0) return {};
-
-                // Calculate total expenses by category
-                const categorySummary = this.expenses.reduce((summary, expense) => {
-                    summary[expense.category] = 
-                        (summary[expense.category] || 0) + expense.amount;
-                    return summary;
-                }, {});
-
-                // Calculate total expense
-                const totalExpense = this.expenses.reduce((total, expense) => 
-                    total + expense.amount, 0);
-
-                return {
-                    totalExpense,
-                    categorySummary
-                };
-            }
-
-            generateReport() {
-                return {
-                    totalExpenses: this.expenses.length,
-                    summary: this.calculateSummary(),
-                    expenses: this.expenses
-                };
-            }
-        }
-
-        // Global variables
-        let expenseTracker = new ExpenseTracker();
-
-        // Login Function
-        function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            if (username === 'user' && password === 'abcd@123') {
-                document.getElementById('loginPage').classList.add('hidden');
-                document.getElementById('expenseTrackerPage').classList.remove('hidden');
-                renderExpenses();
-                updateSummary();
-            } else {
-                alert('Invalid credentials');
-            }
-        }
-
-        // Logout Function
-        function logout() {
-            document.getElementById('loginPage').classList.remove('hidden');
-            document.getElementById('expenseTrackerPage').classList.add('hidden');
-        }
-
-        // Add Expense Function
-        function addExpense() {
-            const description = document.getElementById('expenseDescription').value;
-            const amount = document.getElementById('expenseAmount').value;
-            const category = document.getElementById('expenseCategory').value;
-
-            if (!description || !amount) {
-                alert('Please fill all fields');
-                return;
-            }
-
-            expenseTracker.addExpense(description, amount, category);
-            renderExpenses();
-            updateSummary();
-
-            // Clear input fields
-            document.getElementById('expenseDescription').value = '';
-            document.getElementById('expenseAmount').value = '';
-        }
-
-        // Render Expenses (continued)
-        function renderExpenses() {
-            const expenseList = document.getElementById('expenseList');
-            expenseList.innerHTML = '<h3>Expense List</h3>';
-
-            expenseTracker.expenses.forEach(expense => {
-                const expenseItem = document.createElement('div');
-                expenseItem.classList.add('expense-item');
-                expenseItem.innerHTML = `
-                    <div>
-                        <strong>${expense.description}</strong>
-                        <br>
-                        Category: ${expense.category}
-                        <br>
-                        Date: ${new Date(expense.date).toLocaleDateString()}
-                    </div>
-                    <div>
-                        ${expense.currency} ${expense.amount.toFixed(2)}
-                        <button onclick="deleteExpense(${expense.id})">🗑️</button>
-                    </div>
-                `;
-                expenseList.appendChild(expenseItem);
-            });
-        }
-
-        // Delete Expense
-        function deleteExpense(id) {
-            expenseTracker.deleteExpense(id);
-            renderExpenses();
-            updateSummary();
-        }
-
-        // Update Summary
-        function updateSummary() {
-            const summary = document.getElementById('expenseSummary');
-            const reportData = expenseTracker.generateReport();
-
-            summary.innerHTML = `
-                <h3>Expense Summary</h3>
-                <p>Total Expenses: ${reportData.totalExpenses}</p>
-                <p>Total Amount: ${expenseTracker.currency} ${reportData.summary.totalExpense.toFixed(2)}</p>
-                <h4>Expenses by Category:</h4>
-                <ul>
-                    ${Object.entries(reportData.summary.categorySummary).map(([category, amount]) => 
-                        `<li>${category}: ${expenseTracker.currency} ${amount.toFixed(2)}</li>`
-                    ).join('')}
-                </ul>
-            `;
-        }
-
-        // Currency Change Handler
-        document.getElementById('currencySelect').addEventListener('change', function() {
-            expenseTracker.currency = this.value;
-            localStorage.setItem('currency', this.value);
-            renderExpenses();
-            updateSummary();
-        });
-
-        // Advanced Reporting Function
-        function generateAdvancedReport() {
-            const report = expenseTracker.generateReport();
-            
-            // Create a downloadable JSON report
-            const reportBlob = new Blob([JSON.stringify(report, null, 2)], {type: 'application/json'});
-            const reportUrl = URL.createObjectURL(reportBlob);
-            
-            const downloadLink = document.createElement('a');
-            downloadLink.href = reportUrl;
-            downloadLink.download = `expense_report_${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-        }
-
-        // Chart Generation (using Chart.js - would require including Chart.js library)
-        function generateCategoryChart() {
-            const report = expenseTracker.generateReport();
-            const categories = Object.keys(report.summary.categorySummary);
-            const amounts = Object.values(report.summary.categorySummary);
-
-            // Note: This would require Chart.js to be included
-            const chartContainer = document.createElement('div');
-            chartContainer.classList.add('chart-container');
-            chartContainer.innerHTML = `<canvas id="categoryChart"></canvas>`;
-            document.body.appendChild(chartContainer);
-
-            // Placeholder for chart generation
-            console.log('Chart data:', { categories, amounts });
-        }
-
-        // Export Expenses
-        function exportExpenses() {
-            const expenses = expenseTracker.expenses;
-            const csvContent = [
-                "Description,Amount,Category,Date,Currency",
-                ...expenses.map(e => 
-                    `${e.description},${e.amount},${e.category},${new Date(e.date).toLocaleDateString()},${e.currency}`
-                )
-            ].join('\n');
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.setAttribute('href', url);
-            link.setAttribute('download', `expenses_${new Date().toISOString().split('T')[0]}.csv`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        // Additional Features Section
-        function addAdditionalFeatures() {
-            const additionalFeaturesDiv = document.createElement('div');
-            additionalFeaturesDiv.innerHTML = `
-                <h3>Additional Tools</h3>
-                <button onclick="generateAdvancedReport()">Generate Detailed Report</button>
-                <button onclick="exportExpenses()">Export to CSV</button>
-                <button onclick="generateCategoryChart()">Generate Category Chart</button>
-            `;
-            document.getElementById('expenseTrackerPage').appendChild(additionalFeaturesDiv);
-        }
-
-        // Initialize on page load
-        window.onload = function() {
-            // Set default currency from localStorage
-            const savedCurrency = localStorage.getItem('currency');
-            if (savedCurrency) {
-                document.getElementById('currencySelect').value = savedCurrency;
-            }
-
-            // Add additional features
-            addAdditionalFeatures();
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
