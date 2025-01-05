@@ -32,19 +32,11 @@
             padding: 10px;
             border-radius: 5px;
         }
-        #fileUpload {
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Bachelor Room Management</h1>
-        
-        <div id="fileUpload">
-            <input type="file" id="peopleFile" accept=".txt">
-            <button onclick="loadPeopleFile()">Load People List</button>
-        </div>
 
         <div class="task-section">
             <h2>Daily Waste Disposal</h2>
@@ -63,24 +55,19 @@
     </div>
 
     <script>
-        let peopleList = [];
-        let currentDate = new Date();
+        // Hardcoded list of people
+        const peopleList = [
+            'Rahul', 
+            'Amit', 
+            'Vikram', 
+            'Sanjay', 
+            'Rohan'
+        ];
 
-        function loadPeopleFile() {
-            const fileInput = document.getElementById('peopleFile');
-            const file = fileInput.files[0];
-
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    peopleList = e.target.result.split(',').map(name => name.trim());
-                    assignTasks();
-                };
-                reader.readAsText(file);
-            }
-        }
-
+        // Function to assign tasks
         function assignTasks() {
+            const currentDate = new Date();
+
             // Waste Disposal - Rotate daily
             const wasteDisposalIndex = currentDate.getDate() % peopleList.length;
             document.getElementById('wasteDisposalList').innerHTML = 
@@ -101,6 +88,9 @@
                 document.getElementById('bathroomCleaningList').innerHTML = 'No bathroom cleaning today';
             }
         }
+
+        // Call assignTasks when the page loads
+        window.onload = assignTasks;
     </script>
 </body>
 </html>
