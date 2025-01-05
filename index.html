@@ -2,92 +2,105 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Interactive DBA Portfolio Terminal Interface">
-    <meta name="author" content="John DBA">
-    <meta name="keywords" content="DBA, Database Administrator, Portfolio, Terminal, Oracle, SQL Server">
-    
-    <!-- Ubuntu Mono font -->
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap" rel="stylesheet">
-    
-    <!-- Google Material Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png">
-    
-    <title>Ubuntu DBA Terminal Portfolio</title>
+    <title>Bachelor Room Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .task-section {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .task-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .task-card {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #fileUpload {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <div class="ubuntu-desktop">
-        <!-- Top Panel -->
-        <div class="top-panel" role="banner">
-            <div class="panel-left">
-                <!-- Menu buttons will be added by JavaScript -->
-            </div>
-            <div class="panel-right">
-                <span class="material-icons">schedule</span>
-                <span class="time" aria-label="Current time"></span>
-            </div>
-        </div>
-
-        <!-- Terminal Window -->
-        <div class="terminal-window" role="main">
-            <div class="terminal-header">
-                <div class="window-buttons">
-                    <div class="window-button close" aria-label="Close terminal" role="button" tabindex="0">
-                        <span class="material-icons">close</span>
-                    </div>
-                    <div class="window-button minimize" aria-label="Minimize terminal" role="button" tabindex="0">
-                        <span class="material-icons">remove</span>
-                    </div>
-                    <div class="window-button maximize" aria-label="Maximize terminal" role="button" tabindex="0">
-                        <span class="material-icons">crop_square</span>
-                    </div>
-                </div>
-                <div class="terminal-title">john@portfolio:~</div>
-            </div>
-            
-            <div class="terminal-content" id="terminal">
-                <!-- ASCII Art Banner -->
-                <div class="line">
-                    <span class="ascii-art">
-   ____  ____    _    
-  |  _ \| __ )  / \   
-  | | | |  _ \ / _ \  
-  | |_| | |_) / ___ \ 
-  |____/|____/_/   \_\
-                    </span>
-                </div>
-                
-                <!-- Welcome Message -->
-                <div class="line">Welcome to DBA Portfolio Terminal v1.0</div>
-                <div class="line">Type 'help' for available commands</div>
-                
-                <!-- Input Line -->
-                <div class="input-line">
-                    <span class="prompt">john@portfolio:~$</span>
-                    <input type="text" 
-                           class="input-field" 
-                           autofocus 
-                           aria-label="Terminal input"
-                           autocomplete="off"
-                           spellcheck="false">
-                </div>
-            </div>
-        </div>
-
-        <!-- Notifications -->
-        <div class="notification" role="alert" aria-live="polite"></div>
+    <div class="container">
+        <h1>Bachelor Room Management</h1>
         
-        <!-- Menu Overlay -->
-        <div class="overlay" aria-hidden="true"></div>
+        <div id="fileUpload">
+            <input type="file" id="peopleFile" accept=".txt">
+            <button onclick="loadPeopleFile()">Load People List</button>
+        </div>
+
+        <div class="task-section">
+            <h2>Daily Waste Disposal</h2>
+            <div id="wasteDisposalList" class="task-list"></div>
+        </div>
+
+        <div class="task-section">
+            <h2>Kitchen & Hall Cleaning (Sunday & Wednesday)</h2>
+            <div id="kitchenCleaningList" class="task-list"></div>
+        </div>
+
+        <div class="task-section">
+            <h2>Bathroom Cleaning (Sunday & Wednesday)</h2>
+            <div id="bathroomCleaningList" class="task-list"></div>
+        </div>
     </div>
 
-    <!-- Custom JavaScript -->
-    <script src="terminal.js"></script>
+    <script>
+        let peopleList = [];
+        let currentDate = new Date();
+
+        function loadPeopleFile() {
+            const fileInput = document.getElementById('peopleFile');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    peopleList = e.target.result.split(',').map(name => name.trim());
+                    assignTasks();
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function assignTasks() {
+            // Waste Disposal - Rotate daily
+            const wasteDisposalIndex = currentDate.getDate() % peopleList.length;
+            document.getElementById('wasteDisposalList').innerHTML = 
+                `<div class="task-card">${peopleList[wasteDisposalIndex]} has to throw waste today</div>`;
+
+            // Kitchen & Bathroom Cleaning - On Sundays and Wednesdays
+            if (currentDate.getDay() === 0 || currentDate.getDay() === 3) {
+                const kitchenIndex = Math.floor(Math.random() * peopleList.length);
+                const bathroomIndex = (kitchenIndex + 1) % peopleList.length;
+
+                document.getElementById('kitchenCleaningList').innerHTML = 
+                    `<div class="task-card">${peopleList[kitchenIndex]} has to clean kitchen and hall</div>`;
+                
+                document.getElementById('bathroomCleaningList').innerHTML = 
+                    `<div class="task-card">${peopleList[bathroomIndex]} has to clean bathroom</div>`;
+            } else {
+                document.getElementById('kitchenCleaningList').innerHTML = 'No kitchen cleaning today';
+                document.getElementById('bathroomCleaningList').innerHTML = 'No bathroom cleaning today';
+            }
+        }
+    </script>
 </body>
 </html>
