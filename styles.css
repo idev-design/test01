@@ -1,0 +1,339 @@
+/* Variables */
+:root {
+    --ubuntu-purple: #300a24;
+    --ubuntu-orange: #e95420;
+    --terminal-text: #ffffff;
+    --terminal-prompt: #4e9a06;
+    --terminal-input: #34e2e2;
+    --panel-bg: #2c001e;
+    --error-color: #ff5f57;
+    --success-color: #28c941;
+    --warning-color: #ffbd2e;
+}
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Ubuntu Mono', monospace;
+}
+
+body {
+    background: var(--ubuntu-purple);
+    color: var(--terminal-text);
+    line-height: 1.4;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Desktop Layout */
+.ubuntu-desktop {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Top Panel Styles */
+.top-panel {
+    background: var(--panel-bg);
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.panel-left, .panel-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    height: 100%;
+}
+
+.panel-right .material-icons {
+    font-size: 16px;
+    color: var(--terminal-text);
+}
+
+/* Terminal Window Styles */
+.terminal-window {
+    margin: 50px auto;
+    width: 90%;
+    max-width: 900px;
+    height: calc(100vh - 150px);
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+}
+
+.terminal-header {
+    background: #3d3d3d;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    border-radius: 8px 8px 0 0;
+    user-select: none;
+}
+
+/* Window Buttons */
+.window-buttons {
+    display: flex;
+    gap: 8px;
+    margin-right: 15px;
+}
+
+.window-button {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.window-button .material-icons {
+    font-size: 16px;
+    color: #000;
+}
+
+.window-button:hover {
+    opacity: 0.8;
+}
+
+.close { background: var(--error-color); }
+.minimize { background: var(--warning-color); }
+.maximize { background: var(--success-color); }
+
+/* Terminal Content */
+.terminal-title {
+    color: #ddd;
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+.terminal-content {
+    padding: 20px;
+    height: calc(100% - 35px);
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+/* Terminal Lines and Input */
+.line {
+    margin: 5px 0;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.prompt {
+    color: var(--terminal-prompt);
+    margin-right: 8px;
+}
+
+.command {
+    color: var(--terminal-input);
+}
+
+.command-history {
+    color: var(--terminal-input);
+}
+
+.input-line {
+    display: flex;
+    align-items: center;
+}
+
+.input-field {
+    background: transparent;
+    border: none;
+    color: var(--terminal-input);
+    font-family: 'Ubuntu Mono', monospace;
+    font-size: inherit;
+    flex-grow: 1;
+    outline: none;
+    caret-color: var(--terminal-input);
+}
+
+/* Menu Styles */
+.menu-button {
+    cursor: pointer;
+    padding: 0 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: var(--terminal-text);
+    position: relative;
+    transition: background-color 0.2s;
+}
+
+.menu-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--panel-bg);
+    min-width: 200px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0 0 4px 4px;
+    display: none;
+    z-index: 1001;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-menu.show {
+    display: block;
+    animation: menuSlideDown 0.2s ease;
+}
+
+/* Content Cards */
+.content-card {
+    border: 1px solid var(--ubuntu-orange);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s, border-color 0.3s;
+}
+
+.content-card:hover {
+    transform: translateX(10px);
+    border-color: var(--terminal-input);
+}
+
+.content-card h3 {
+    color: var(--ubuntu-orange);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.content-card .material-icons {
+    font-size: 20px;
+}
+
+/* ASCII Art */
+.ascii-art {
+    color: var(--ubuntu-orange);
+    white-space: pre;
+    margin: 10px 0;
+}
+
+/* Notifications */
+.notification {
+    position: fixed;
+    top: 40px;
+    right: 20px;
+    background: var(--panel-bg);
+    padding: 15px;
+    border-radius: 4px;
+    display: none;
+    animation: slideIn 0.3s ease;
+    color: var(--terminal-text);
+    border: 1px solid var(--ubuntu-orange);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1002;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+}
+
+.overlay.show {
+    display: block;
+    animation: fadeIn 0.2s ease;
+}
+
+/* Error States */
+.error {
+    color: var(--error-color);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes menuSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .terminal-window {
+        width: 95%;
+        margin: 20px auto;
+        height: calc(100vh - 100px);
+    }
+
+    .menu-button {
+        padding: 0 8px;
+    }
+
+    .content-card {
+        padding: 10px;
+    }
+}
+
+/* Accessibility Styles */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* Focus Styles */
+*:focus-visible {
+    outline: 2px solid var(--ubuntu-orange);
+    outline-offset: 2px;
+}
