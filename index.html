@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive DBA Portfolio Terminal Interface">
+    <meta name="author" content="John DBA">
+    <meta name="keywords" content="DBA, Database Administrator, Portfolio, Terminal, Oracle, SQL Server">
+    
+    <!-- Ubuntu Mono font -->
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <title>Ubuntu DBA Terminal Portfolio</title>
+</head>
+<body>
+    <div class="ubuntu-desktop">
+        <!-- Top Panel -->
+        <div class="top-panel" role="banner">
+            <div class="panel-left">
+                <!-- Menu buttons will be added by JavaScript -->
+            </div>
+            <div class="panel-right">
+                <span class="material-icons">schedule</span>
+                <span class="time" aria-label="Current time"></span>
+            </div>
+        </div>
+
+        <!-- Terminal Window -->
+        <div class="terminal-window" role="main">
+            <div class="terminal-header">
+                <div class="window-buttons">
+                    <div class="window-button close" aria-label="Close terminal" role="button" tabindex="0">
+                        <span class="material-icons">close</span>
+                    </div>
+                    <div class="window-button minimize" aria-label="Minimize terminal" role="button" tabindex="0">
+                        <span class="material-icons">remove</span>
+                    </div>
+                    <div class="window-button maximize" aria-label="Maximize terminal" role="button" tabindex="0">
+                        <span class="material-icons">crop_square</span>
+                    </div>
+                </div>
+                <div class="terminal-title">john@portfolio:~</div>
+            </div>
+            
+            <div class="terminal-content" id="terminal">
+                <!-- ASCII Art Banner -->
+                <div class="line">
+                    <span class="ascii-art">
+   ____  ____    _    
+  |  _ \| __ )  / \   
+  | | | |  _ \ / _ \  
+  | |_| | |_) / ___ \ 
+  |____/|____/_/   \_\
+                    </span>
+                </div>
+                
+                <!-- Welcome Message -->
+                <div class="line">Welcome to DBA Portfolio Terminal v1.0</div>
+                <div class="line">Type 'help' for available commands</div>
+                
+                <!-- Input Line -->
+                <div class="input-line">
+                    <span class="prompt">john@portfolio:~$</span>
+                    <input type="text" 
+                           class="input-field" 
+                           autofocus 
+                           aria-label="Terminal input"
+                           autocomplete="off"
+                           spellcheck="false">
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="notification" role="alert" aria-live="polite"></div>
+        
+        <!-- Menu Overlay -->
+        <div class="overlay" aria-hidden="true"></div>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script src="js/terminal.js"></script>
+</body>
+</html>
